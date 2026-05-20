@@ -45,6 +45,10 @@ This is not only a 3D viewer. It is intended to become an engineering model that
 - Documentation index
 - Settings
 
+## Codex Handoff
+
+Use `docs/codex_handoff_prompt.md` when moving this project into Codex. Use `docs/exit_strategy_to_codex.md` if work needs to transition out of ChatGPT and into a repository-based coding workflow.
+
 ## Run Locally
 
 ```bash
@@ -64,6 +68,4 @@ Do not commit virtual environments, Python cache folders, large PDF references, 
 
 The safety relay and E-stop material in this repository is concept-level engineering documentation. It is not a validated safety design. Before any physical machine is energized, the design must be checked against the actual devices, risk assessment, applicable standards, and site safety requirements by qualified personnel.
 
-## Codex Handoff
 
-Use `docs/codex_handoff_prompt.md` when moving this project into Codex. Use `docs/exit_strategy_to_codex.md` if work needs to transition out of ChatGPT and into a repository-based coding workflow.
