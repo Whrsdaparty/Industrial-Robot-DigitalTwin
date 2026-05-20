@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DigitalTwinDocumentationDialog</class>
+ <widget class="QDialog" name="DigitalTwinDocumentationDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>520</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Digital Twin Documentation</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="header_label">
+     <property name="text">
+      <string>BOM and Digital Twin Documentation</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="bom_group_box">
+     <property name="title">
+      <string>Bill of Materials / Parts</string>
+     </property>
+     <layout class="QVBoxLayout" name="bomLayout">
+      <item>
+       <widget class="QTextEdit" name="bom_text"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="doc_group_box">
+     <property name="title">
+      <string>Controller and HMI Notes</string>
+     </property>
+     <layout class="QVBoxLayout" name="docLayout">
+      <item>
+       <widget class="QTextEdit" name="doc_text"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

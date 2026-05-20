@@ -1,0 +1,64 @@
+from __future__ import annotations
+
+import sys
+sys.path.append('/usr/lib/freecad-daily-python3/lib')
+sys.path.append('/usr/share/freecad-daily/Ext')
+sys.path.append('/usr/lib/python3/dist-packages')
+sys.path.append('$HOME/.local/share/FreeCAD/Mod/freecad.cross')
+sys.path.append('$HOME/.local/share/FreeCAD/Mod/MeshRemodel')
+sys.path.append('$HOME/.local/share/FreeCAD/Mod/Assembly4')
+sys.path.append('/usr/share/freecad-daily/Mod/PartDesign')
+sys.path.append('/usr/share/freecad-daily/Mod/MeshPart')
+sys.path.append('/usr/share/freecad-daily/Mod/Material')
+sys.path.append('/usr/share/freecad-daily/Mod/Draft')
+sys.path.append('/usr/share/freecad-daily/Mod/Mesh')
+sys.path.append('/usr/share/freecad-daily/Mod/Part')
+sys.path.append('/usr/share/freecad-daily/Mod/Arch')
+sys.path.append('/usr/lib/freecad-daily/Mod/Arch')
+sys.path.append('/usr/lib/freecad-daily/Mod/Draft')
+sys.path.append('$HOME/.local/share/FreeCAD/Macro/')
+sys.path.append('/usr/lib/freecad-daily/Macro')
+
+# Do not do `from freecad.cross.import_dae import *`
+# because it will override the built-in `open()`
+
+from freecad.cross.assembly4_utils import *
+from freecad.cross.assembly_from_urdf import *
+from freecad.cross.coin_utils import *
+from freecad.cross.deep_copy import *
+from freecad.cross.freecad_utils import *
+from freecad.cross.freecadgui_utils import *
+from freecad.cross.geometry_helpers import *
+from freecad.cross.gui_utils import *
+from freecad.cross.joint_proxy import *
+from freecad.cross.ik import *
+from freecad.cross.ik_utils import *
+from freecad.cross.solver_wrappers.pinocchio import *
+from freecad.cross.solver_wrappers.robotpkg import *
+from freecad.cross.kk_robot import *
+from freecad.cross.lidar2d_proxy import *
+from freecad.cross.link_proxy import *
+from freecad.cross.mesh_utils import *
+from freecad.cross.placement_utils import *
+from freecad.cross.planning_scene_proxy import *
+from freecad.cross.planning_scene_utils import *
+from freecad.cross.pose_proxy import *
+from freecad.cross.rgb_camera_proxy import *
+from freecad.cross.robot_from_kk import *
+from freecad.cross.robot_from_urdf import *
+from freecad.cross.robot_proxy import *
+from freecad.cross.ros.node import *
+from freecad.cross.ros.planning_scene import *
+from freecad.cross.ros.utils import *
+from freecad.cross.trajectory_proxy import *
+from freecad.cross.ultrasound_proxy import *
+from freecad.cross.urdf_loader import *
+from freecad.cross.urdf_parser_utils import *
+from freecad.cross.urdf_utils import *
+from freecad.cross.utils import *
+from freecad.cross.version import *
+from freecad.cross.wb_globals import *
+from freecad.cross.wb_utils import *
+from freecad.cross.workcell_proxy import *
+from freecad.cross.xacro_loader import *
+from freecad.cross.xacro_object_proxy import *

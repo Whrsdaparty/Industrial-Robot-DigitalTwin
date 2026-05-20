@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DigitalTwinMaintenanceDialog</class>
+ <widget class="QDialog" name="DigitalTwinMaintenanceDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Maintenance Monitor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="header_label">
+     <property name="text">
+      <string>Maintenance and Lifetime Tracking</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="runtime_group_box">
+     <property name="title">
+      <string>Runtime Hours</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="motor_hours_label">
+        <property name="text">
+         <string>Motor runtime hours</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="motor_hours_value">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="controller_hours_label">
+        <property name="text">
+         <string>Controller runtime hours</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="controller_hours_value">
+        <property name="text">
+         <string>0</string>
+       </property>
+      </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="life_group_box">
+     <property name="title">
+      <string>Life Indicators</string>
+     </property>
+     <layout class="QVBoxLayout" name="lifeLayout">
+      <item>
+       <widget class="QLabel" name="motor_life_label">
+        <property name="text">
+         <string>Main motor life</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="motor_life_bar">
+        <property name="value">
+         <number>75</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="bearings_life_label">
+        <property name="text">
+         <string>Bearings life</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="bearings_life_bar">
+        <property name="value">
+         <number>60</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="maintenance_group_box">
+     <property name="title">
+      <string>Scheduled Maintenance</string>
+     </property>
+     <layout class="QVBoxLayout" name="maintenanceLayout">
+      <item>
+       <widget class="QTextEdit" name="maintenance_notes"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="refresh_maintenance_button">
+        <property name="text">
+         <string>Refresh Maintenance Status</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
