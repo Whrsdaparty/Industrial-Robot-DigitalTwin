@@ -1,0 +1,40 @@
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# FreeCAD backup files
+*.FCBak
+*.FCStd1
+*.FCStd2
+*.FCStd3
+*.FCStd4
+*.FCStd5
+*.FCStd6
+*.FCStd7
+*.FCStd8
+*.FCStd9
+
+# ROS/colcon build outputs
+build/
+install/
+log/
+
+# Local environment
+.env
+.env.*
+
+# Local RobotCAD workbench copies. Keep DT/ itself untouched.
+vendor/freecad.robotcad/
+DT/freecad.robotcad-main/
