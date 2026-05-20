@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="-34 -32.99 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <filter id="inner-shadow-filter-0" color-interpolation-filters="sRGB" x="-50%" y="-50%" width="200%" height="200%" bx:preset="inner-shadow 1 0 0 10 0.5 rgba(0,0,0,0.7)">
+      <feOffset dx="0" dy="0"/>
+      <feGaussianBlur stdDeviation="10"/>
+      <feComposite operator="out" in="SourceGraphic"/>
+      <feComponentTransfer result="choke">
+        <feFuncA type="linear" slope="1"/>
+      </feComponentTransfer>
+      <feFlood flood-color="rgba(0,0,0,0.7)" result="color"/>
+      <feComposite operator="in" in="color" in2="choke" result="shadow"/>
+      <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect y="1.01" width="37.88" height="232" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); filter: url('#inner-shadow-filter-0');"/>
+  <rect x="162.56" y="19.327" width="44.15" height="209.669" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); filter: url('#inner-shadow-filter-0');"/>
+  <path style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); filter: url('#inner-shadow-filter-0');" d="M 206.71 19.327 L 226 9.767 C 226.308 9.529 232 6.469 232 6.469 L 187.422 7.131 L 162.56 19.327 L 206.71 19.327 Z"/>
+  <path style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); filter: url('#inner-shadow-filter-0');" d="M 206.282 228.666 L 231.572 211.851 L 232 6.801 L 206.71 19.327 L 206.282 228.666 Z"/>
+  <path d="M -141.622 -121.622 H -84.566 L -84.566 -145.432 L -56.268 -113.685 L -84.566 -81.938 L -84.566 -105.747 H -141.622 V -121.622 Z" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); filter: url('#inner-shadow-filter-0');" transform="matrix(-1, 0, 0, -1, 0, 0)" bx:shape="arrow -141.622 -145.432 85.354 63.494 15.875 28.298 0 1@99fc1cdc"/>
+</svg>

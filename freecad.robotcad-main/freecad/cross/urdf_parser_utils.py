@@ -1,0 +1,313 @@
+# Utility function depending on the `urdf_parser_py` module (provided by ROS).
+
+from pathlib import Path
+
+import FreeCAD as fc
+
+import Mesh as fcmesh  # FreeCAD.
+
+from urdf_parser_py.urdf import Box
+from urdf_parser_py.urdf import Cylinder
+from urdf_parser_py.urdf import Joint as UrdfJoint
+from urdf_parser_py.urdf import Joint as UrdfLink
+from urdf_parser_py.urdf import Mesh
+from urdf_parser_py.urdf import Pose
+from urdf_parser_py.urdf import Sphere
+
+from .freecad_utils import add_object, is_part_feature
+from .freecad_utils import is_group
+from .freecad_utils import is_mesh
+from .freecad_utils import warn
+from .mesh_utils import read_obj_dae
+from .mesh_utils import scale_mesh_object
+from .ros.utils import abs_path_from_ros_path
+from .ros.utils import pkg_and_file_from_ros_path
+from .ros.utils import ros_path_from_abs_path
+from .urdf_utils import rotation_from_rpy
+
+# Typing hints.
+Doc = fc.Document
+DO = fc.DocumentObject
+Shape = Box | Cylinder | Mesh | Sphere
+
+
+def obj_from_geometry(
+        geometry: Shape,
+        doc_or_group: Doc | DO,
+        convert_mesh_to_solid: bool = False,
+        min_vol_instead_zero: bool = False,
+        remove_solid_splitter: bool = False,
+) -> tuple[DO | None, Path | None]:
+    """Return a FreeCAD object for the URDF shape with the path for meshes."""
+    if isinstance(geometry, Box):
+        return obj_from_box(geometry, doc_or_group, min_vol_instead_zero)
+    if isinstance(geometry, Cylinder):
+        return obj_from_cylinder(geometry, doc_or_group, min_vol_instead_zero)
+    if isinstance(geometry, Mesh):
+        return obj_from_mesh(geometry, doc_or_group, convert_mesh_to_solid, remove_solid_splitter)
+    if isinstance(geometry, Sphere):
+        return obj_from_sphere(geometry, doc_or_group, min_vol_instead_zero)
+    raise NotImplementedError('Primitive not implemented')
+
+
+def placement_from_origin(
+        origin: Pose,
+) -> fc.Placement:
+    """Return the FreeCAD placement corresponding to URDF origin."""
+    placement = fc.Placement()
+    if origin is None:
+        return placement
+    if hasattr(origin, 'position'):
+        # Convert from meters to millimeters.
+        placement.Base = fc.Vector(origin.position) * 1000.0
+    if hasattr(origin, 'rpy'):
+        placement.Rotation = rotation_from_rpy(origin.rpy)
+    return placement
+
+
+def placement_from_link(
+        link: UrdfLink,
+) -> fc.Placement:
+    """Return the FreeCAD placement corresponding to the URDF link."""
+    if not hasattr(link, 'origin'):
+        return fc.Placement()
+    return placement_from_origin(link.origin)
+
+
+def placement_from_joint(
+        joint: UrdfJoint,
+) -> fc.Placement:
+    """Return the FreeCAD placement corresponding to the URDF joint."""
+    if not hasattr(joint, 'origin'):
+        return fc.Placement()
+    return placement_from_origin(joint.origin)
+
+
+def axis_to_z(
+        joint: UrdfJoint,
+) -> fc.Placement:
+    """Return the rotation to bring `joint.axis` to z."""
+    if hasattr(joint, 'axis') and (joint.axis is not None):
+        axis = fc.Vector(joint.axis)
+    else:
+        # URDF's default axis.
+        if joint.type in ['prismatic', 'revolute', 'continuous', 'planar']:
+            axis = fc.Vector(1.0, 0.0, 0.0)
+        else:
+            axis = fc.Vector(0.0, 0.0, 1.0)
+    zaxis = fc.Vector(0.0, 0.0, 1.0)
+    # Orient to bring the joint axis along z.
+    return fc.Rotation(zaxis, axis)
+
+
+def placement_along_z_from_joint(
+        joint: UrdfJoint,
+) -> fc.Placement:
+    """Return the joint placement so that its axis is along z."""
+    placement = placement_from_joint(joint)
+    placement.Rotation *= axis_to_z(joint)
+    return placement
+
+
+def obj_from_box(
+        geometry: Box,
+        doc_or_group: Doc | DO,
+        min_vol_instead_zero: bool = False,
+) -> tuple[DO, None]:
+    """Return a `Part::Box` object and None.
+
+    Return a `Part::Box` object for the URDF shape.
+    The second element of the tuple is None for API consistency.
+
+    """
+    if min_vol_instead_zero:
+        if geometry.size[0] <= 0:
+            geometry.size[0] = 0.000001
+        if geometry.size[1] <= 0:
+            geometry.size[1] = 0.000001
+        if geometry.size[2] <= 0:
+            geometry.size[2] = 0.000001
+
+    # A box with its reference point at the lower-left-front corner.
+    obj = add_object(doc_or_group, 'Part::Box', 'box')
+    obj.Length = geometry.size[0] * 1000.0  # m to mm.
+    obj.Width = geometry.size[1] * 1000.0
+    obj.Height = geometry.size[2] * 1000.0
+    obj.Placement.Base -= fc.Vector(geometry.size) * 1000.0 / 2.0
+    return obj, None
+
+
+def obj_from_sphere(
+        geometry: Sphere,
+        doc_or_group: Doc | DO,
+        min_vol_instead_zero: bool = False,
+) -> tuple[DO, None]:
+
+    if min_vol_instead_zero:
+        if geometry.radius <= 0:
+            geometry.radius = 0.000001
+
+    obj = add_object(doc_or_group, 'Part::Sphere', 'sphere')
+    obj.Radius = geometry.radius * 1000.0  # m to mm.
+    return obj, None
+
+
+def obj_from_cylinder(
+        geometry: Cylinder,
+        doc_or_group: Doc | DO,
+        min_vol_instead_zero: bool = False,
+) -> tuple[DO, None]:
+    """Return a `Part::Cylinder` object and None.
+
+    Return a `Part::Cylinder` object for the URDF shape.
+    The second element of the tuple is None for API consistency.
+
+    """
+    if min_vol_instead_zero:
+        if geometry.radius <= 0:
+            geometry.radius = 0.000001
+        if geometry.length <= 0:
+            geometry.length = 0.000001
+
+    # A cylinder along the z-axis with its reference point at the middle of the
+    # bottom disc.
+    obj = add_object(doc_or_group, 'Part::Cylinder', 'cylinder')
+    obj.Radius = geometry.radius * 1000.0  # m to mm.
+    obj.Height = geometry.length * 1000.0  # m to mm.
+    obj.Placement.Base.z -= geometry.length * 1000.0 / 2.0
+    return obj, None
+
+
+def obj_from_mesh(
+        geometry: Mesh,
+        doc_or_group: Doc | DO,
+        convert_mesh_to_solid: bool = False,
+        remove_solid_splitter: bool = False,
+) -> tuple[DO | None, Path | None]:
+    """
+    Return a document object and the path to the original file.
+
+    Return a `Mesh::Feature` or a `App::Part` object for the URDF shape
+    and the absolute path to the associated file.
+
+    If the same file was already imported, return the corresponding existing
+    object.
+    """
+    mesh_path = abs_path_from_ros_path(geometry.filename)
+    if not mesh_path:
+        pkg, _ = pkg_and_file_from_ros_path(geometry.filename)
+        if pkg:
+            warn(f'ROS package {pkg} not found, cannot read {geometry.filename}')
+        else:
+            warn(f'Cannot parse mesh path {geometry.filename}')
+        return None, None
+
+    # We do not take `geometry.filename` directly because it may use a
+    # different format than `package://...`.
+    mesh_ros_path = ros_path_from_abs_path(mesh_path.expanduser(), package_mark = ['package.xml'], stub_package = True) #, 'urdf/', 'meshes/'
+
+    if is_group(doc_or_group):
+        doc = doc_or_group.Document
+        group = doc_or_group
+    else:
+        doc = doc_or_group
+        group = None
+
+    # Look for an existing object with the same mesh.
+    for obj in doc.Objects:
+        if not convert_mesh_to_solid and is_mesh(obj):
+            if obj.Label2 == mesh_ros_path:
+                return obj, mesh_path
+        elif convert_mesh_to_solid and is_part_feature(obj):
+            if obj.Label2 == mesh_ros_path:
+                return obj, mesh_path
+
+    if not mesh_ros_path:
+        warn(f'Empty mesh_ros_path. Skip mesh file - ' + str(mesh_path))
+        return None, None
+
+    # Import a new mesh.
+    if mesh_path.suffix.lower() == '.dae':
+        mesh_objects = read_obj_dae(mesh_path, doc)
+        for obj in mesh_objects:
+            scale_mesh_object(obj, geometry.scale)
+        if not mesh_objects:
+            return None, None
+        if len(mesh_objects) == 1:
+            mesh_obj = mesh_objects[0]
+            mesh_obj.Label2 = mesh_ros_path
+        if len(mesh_objects) > 1:
+            part_with_mesh_objs = add_object(doc_or_group, 'App::Part', mesh_path.stem)
+            part_with_mesh_objs.Label = mesh_path.name
+            part_with_mesh_objs.Label2 = mesh_ros_path
+            for mesh_obj in mesh_objects:
+                part_with_mesh_objs.addObject(mesh_obj)
+            mesh_obj = part_with_mesh_objs # unify processing
+    else: #other format.
+        raw_mesh = fcmesh.read(str(mesh_path))
+        mesh_obj = doc.addObject('Mesh::Feature', mesh_path.name)
+        mesh_obj.Label = mesh_path.name
+        mesh_obj.Label2 = mesh_ros_path
+        mesh_obj.Mesh = raw_mesh
+
+    if mesh_path.suffix.lower() in ['.stl', '.obj']:
+        scale_mesh_object(mesh_obj, 1000.0)  # m to mm.
+        scale_mesh_object(mesh_obj, geometry.scale)
+
+    if convert_mesh_to_solid:
+        try:
+            if mesh_obj.TypeId == 'App::Part':
+                
+                for el in mesh_obj.Group:
+                   solid_obj = mesh_to_solid(doc, el, mesh_path, mesh_ros_path, remove_solid_splitter)
+                   mesh_obj.addObject(solid_obj)
+                if group:
+                    group.addObject(solid_obj)
+            else:
+                solid_obj = mesh_to_solid(doc, mesh_obj, mesh_path, mesh_ros_path, remove_solid_splitter)
+                if group:
+                    group.addObject(solid_obj)
+                mesh_obj = solid_obj
+                
+            return mesh_obj, mesh_path
+        except Exception as e:
+            warn(f'Can`t create solid for mesh. Skip creating solid. ' + str(e))
+            return None, None
+    else:
+        if group:
+            group.addObject(mesh_obj)
+
+    return mesh_obj, mesh_path
+
+
+def mesh_to_solid(doc, mesh_obj, mesh_path, mesh_ros_path, remove_solid_splitter):
+    import Part
+    import gc
+    ### Begin command Part_ShapeFromMesh
+    mesh_obj_shape = doc.addObject('Part::Feature', mesh_obj.Label2 + '_shape')
+    __shape__ = Part.Shape()
+    __shape__.makeShapeFromMesh(mesh_obj.Mesh.Topology, 0.100000, False)
+    mesh_obj_shape.Shape = __shape__
+    mesh_obj_shape.purgeTouched()
+    del __shape__
+    ### Begin command Part_MakeSolid
+    mesh_obj_solid = doc.addObject("Part::Feature", mesh_obj.Label2 + '_solid')
+    mesh_obj_solid.Label = mesh_path.name
+    mesh_obj_solid.Label2 = mesh_ros_path
+    shell = Part.Shell(mesh_obj_shape.Shape.Faces)
+    if remove_solid_splitter:
+        try:
+            shell = shell.removeSplitter()
+        except:
+            warn('Can`t remove splitter from body - ' + mesh_obj_solid.Label)
+            pass
+    mesh_obj_solid.Shape = Part.Solid(shell)
+    mesh_obj_solid.purgeTouched()
+    mesh_or_solid_obj = mesh_obj_solid
+    del mesh_obj_solid, shell
+    # Remove intermediate objects
+    doc.removeObject(mesh_obj_shape.Name)
+    doc.removeObject(mesh_obj.Name)
+    gc.collect()
+
+    return mesh_or_solid_obj

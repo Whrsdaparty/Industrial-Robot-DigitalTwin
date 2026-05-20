@@ -1,0 +1,96 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Remote Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "${userHome}/.local/share/FreeCAD/Mod/freecad.robotcad"
+                } 
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "Python AppImage 1.1: Remote Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "${userHome}/.local/share/FreeCAD/v1-1/Mod/freecad.robotcad"
+                } 
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "Python AppImage 1.2: Remote Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "${userHome}/.local/share/FreeCAD/v1-2/Mod/freecad.robotcad"
+                } 
+            ],
+            "justMyCode": true
+        },        
+        {
+            "name": "Python Conda Mod: Remote Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "${userHome}/miniconda3/envs/freecad_1_0_312/share/Mod/freecad.robotcad"
+                } 
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "Remote Attach To Agent Package Example",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5680
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/docker/ros2_ws/src/chassis_new_4_cameras_11/chassis_new_4_cameras_11_agent/chassis_new_4_cameras_11_agent",
+                    "remoteRoot": "${userHome}/ros2/ws/build/chassis_new_4_cameras_11_agent/chassis_new_4_cameras_11_agent"
+                },
+                {
+                    "localRoot": "${workspaceFolder}/docker/ros2_ws/src/chassis_new_4_cameras_11/chassis_new_4_cameras_11_agent/chassis_new_4_cameras_11_agent",
+                    "remoteRoot": "${userHome}/ros2/ws/install/chassis_new_4_cameras_11_agent/lib/python3.12/site-packages/chassis_new_4_cameras_11_agent"
+                },                
+                {
+                    "localRoot": "${workspaceFolder}/docker/ros2_ws/.venv/lib/python3.12/site-packages",
+                    "remoteRoot": "${userHome}/ros2/ws/.venv/lib/python3.12/site-packages"
+                } 
+            ],
+            "justMyCode": false
+        }
+    ]
+}

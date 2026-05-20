@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DigitalTwinVibrationDialog</class>
+ <widget class="QDialog" name="DigitalTwinVibrationDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Vibration Monitor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="header_label">
+     <property name="text">
+      <string>Vibration and Natural Frequency Monitor</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="piezo_label">
+       <property name="text">
+        <string>Piezo sensor reading</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="piezo_value">
+       <property name="text">
+        <string>0.00 g</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="natural_freq_label">
+       <property name="text">
+        <string>Natural frequency</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="natural_freq_value">
+       <property name="text">
+        <string>0 Hz</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="status_label">
+       <property name="text">
+        <string>Health status</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="status_value">
+       <property name="text">
+        <string>Normal</string>
+       </property>
+      </widget>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="trend_group_box">
+     <property name="title">
+      <string>Vibration Trend</string>
+     </property>
+     <layout class="QVBoxLayout" name="trendLayout">
+      <item>
+       <widget class="QTextEdit" name="trend_text"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="update_vibration_button">
+        <property name="text">
+         <string>Update Vibration Data</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

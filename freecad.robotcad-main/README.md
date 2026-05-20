@@ -1,0 +1,346 @@
+# RobotCAD
+
+RobotCAD is a FreeCAD workbench to generate robot description packages (xacro or URDF) for the Robot Operating System, [ROS2].
+
+
+#### Poll about RobotCAD learning course <a href="https://github.com/drfenixion/freecad.robotcad/discussions/120" target="_blank">here</a>
+
+<a href="https://youtu.be/T_OGQFc9IMk" target="_blank">RobotCAD 3.0.0 workflow demo</a>
+<a href="https://youtu.be/T_OGQFc9IMk" target="_blank"><img src="https://github.com/user-attachments/assets/2a85ad00-bfe0-4242-bbc1-178cf92cfc0e" alt="RobotCAD 3.0.0 workflow video"/></a>
+
+<br /><br />
+<a href="https://www.youtube.com/watch?v=26duvrKwHdU" target="_blank">RobotCAD 4.0.0 functionality demo</a>
+<a href="https://www.youtube.com/watch?v=26duvrKwHdU" target="_blank"><img src="https://github.com/user-attachments/assets/202f3a45-35ee-441d-b0e6-55c34616e701" alt="RobotCAD 4.0.0 functionality demo"/></a>
+
+<a href="https://vkvideo.ru/video-219386643_456239075" target="_blank">RobotCAD 6 - Reforged - some made models</a>
+<a href="https://vkvideo.ru/video-219386643_456239075" target="_blank">![robotcad_reforged_new](https://github.com/user-attachments/assets/fc0f731e-5840-4689-aa95-83769f879d48)</a>
+
+<br /><br />
+<a href="https://vkvideo.ru/video-219386643_456239078" target="_blank">RobotCAD 8 - Library - demo</a>
+<a href="https://vkvideo.ru/video-219386643_456239078" target="_blank">![models library_menu_demo](https://github.com/user-attachments/assets/71d7fdce-db16-4812-afd8-61a3aeb02eb5)</a>
+
+<br />
+Video of creating controllable models: <br />
+<a href="https://www.youtube.com/watch?v=NUw6PLPC4x4" target="_blank">Diff drive chassis</a> <br />
+<a href="https://www.youtube.com/watch?v=o8casCU7c7Q" target="_blank">Manipulator on chassis</a> <br />
+<a href="https://www.youtube.com/watch?v=B62JW_0SFl0" target="_blank">Multicopter with manipulator and chassis</a> <br />
+<a href="https://github.com/drfenixion/parts_for_robotcad_lessons" target="_blank">Chassis, manipulator, multicopter parts used in the video</a> <br />
+
+# Key features list:
+1. Autoinstall and run by startup script.
+1. Modeling parts (in FreeCAD).
+1. Converter Assembly WB (default) to RobotCAD structure. You can use converter or manually create robot structure in RobotCAD.
+1. AI Generator of robot structure from primitives by text description (fast stend prototyping). 
+1. Creating robot structure (joints, links, elements of link (Collisions, Visuals, Reals), etc)
+    1. Automatic creating links by selected objects
+    1. Automatic creating joints by selected links
+    1. Automatic creating full robot structure by selected objects (links in joints will have order of objects selection)
+1. Сonvenient new tools to set placement of joints and links (intuitive way)
+    1. Set placement just by selecting faces of links and it will automatically connected
+    1. Joint/link placement rotation tools
+    1. Tools for set placement of joints/links based on LCS or other references.
+1. Material setting (from library or custom) to link or whole robot
+1. Automatic calculation (based on material or custom mass):
+    1. mass and inertia
+    1. center of mass (in global and local coordinates)
+    1. positions of joints relative to the robot's center of mass
+1. Collisions automatic making tools (based on Real element of robot link)
+1. Controllers and sensor data broadcasters based on ros2_controllers (ros2_control)
+    1. Add the necessary controllers and broadcasters to the robot and you have a robot ready to be controlled in the simulation
+1. Sensors based on Gazebo sensors
+    1. Add the necessary sensors and use it in Gazebo.
+1. Integrated ready to use models library
+1. Explode View with adjustable offset and states memory.
+1. Basic code generator:
+    1. ROS2 package with launchers for Gazebo, RViz
+    1. URDF (kinematics, mass, inertia, sensors, etc.)
+    1. Meshes
+    1. SDF maps created by "Custom world" tool (map editor)
+    1. Controllers config (use extended generator if need all ready to use controllers code)
+1. Tool for use External Extended Code Generating service (startup script, docker, multicopters, all required code for controllers, AI VLM agent package)
+    1. External Code Generator:
+        1. all of basic code generator
+        1. AI agent package for manage robot (local or cloud Ollama VLM integarated in project startup script via docker). You can control robot by chat with it.
+        1. Project structure
+        1. Startup script for build and run docker container with all dependencies of project
+        1. Init Git with submodules for dependencies management
+        1. Docker related code (dockerfiles, etc) (you dont need to manually install ROS2 or Gazebo, it will be installed automatically in docker)
+        1. ros2_controllers (integrated in your package with ros2_control launcher)
+        1. Specific robot types code (multicopter - PX4 + Gazebo + ROS2)
+        1. Nvidia video cards container support
+        1. README instruction how to use
+1. all features from CROSS workbench
+
+# Here various installation options (choose one):
+Recomended FreeCAD version is 1.1.* AppImage. FreeCAD 1.2.*dev also can be used.
+
+## FreeCAD Addon Manager - Recommended
+_Some tools (MoveIt integration, Gazebo map editor) will requires installed ROS2 or Gazebo, but other tools will works._
+
+Open FreeCAD
+
+Click the Edit -> Preferencies -> Addon Manager Options
+
+Go to the Custom repositories block
+
+Click + button and enter the repository URL: https://github.com/drfenixion/freecad.robotcad, branch: 'main'
+
+Click OK to save the settings
+
+Go to Tools → Addon Manager
+
+Search for RobotCAD in the Addon Manager
+
+Click Install
+
+Restart FreeCAD
+
+## Fast install and run script
+_Script installs also ROS2 + Gazebo in Docker, its required for some tools. FreeCAD will be run from inside the Docker._
+
+If you have Docker (buildx, compose plugins) installed or have Ubuntu OS (Docker will be autoinstalled) just do:
+```
+cd ~/
+git clone https://github.com/drfenixion/freecad.robotcad.git
+cd freecad.robotcad/docker
+bash run.bash -c
+```
+Same in one line
+```
+cd ~/ && git clone https://github.com/drfenixion/freecad.robotcad.git && cd freecad.robotcad/docker && bash run.bash -c
+```
+Tested on Ubuntu 24.04, 22.04, 20.04 and Windows 10 via WSL2 (Ubuntu 22.04).
+
+If Docker is not installed and OS is Ubuntu script will try to install Docker automatically in other case you must install docker manually. In case of manually Docker installation look at [docker/README.md](https://github.com/drfenixion/freecad.robotcad/blob/main/docker/README.md). There is also additional information about folders where you should store projects files.
+
+## Fast install and run script with FreeCAD 1.1 AppImage - Recommended
+Do same as **Fast install and run script** section.
+Place FreeCAD 1.1 AppImage to docker/freecad/freecad_custom_appimage_dir and do `bash run.bash -cif` (in docker dir) one time and then for regular run `bash run.bash -ci`. Dont forget to update RobotCAD before and make FreeCAD 1.1 AppImage executable.
+
+**You also can install RobotCAD manually via FreeCAD Addon manager by** [Installation](https://github.com/drfenixion/freecad.robotcad#Installation) **section.**
+
+RobotCAD will not work with CROSS workbench (same namespace). Remove CROSS before install RobotCAD.
+
+#### Regular RobotCAD run
+```
+cd ~/freecad.robotcad/docker && bash run.bash -c
+```
+
+#### Update RobotCAD
+```
+cd ~/freecad.robotcad && git pull && cd docker && bash run.bash -fc
+```
+
+#### Recreate container
+In case of start issue (transfer from 3.0.0 to next version may need "-f") recreate container by
+```
+bash run.bash -f
+```
+
+#### Rebuild image and run new container
+In case of migration from any version to v7.0.0 rebuild docker image
+```
+bash run.bash -b
+```
+
+#### Clear old container logs
+You will see logs from current start
+```
+bash run.bash -c
+```
+
+# Troubleshooting
+
+#### Fix "xhost: command not found"
+```
+apt install x11-xserver-utils
+```
+
+#### Fix "Segmentation fault" (if faced)
+In case of migration from < v7 to v7+ rebuild docker image.
+
+It will update RobotCAD and rebuild image and fix FreeCAD share dir owner.
+```
+git pull && cd docker && bash run.bash -bco
+```
+In case you already migrated to v7.
+
+It will update RobotCAD and recreate container and fix FreeCAD share dir owner.
+```
+git pull && cd docker && bash run.bash -fco
+```
+
+#### Fix "failed to create drawable" (if faced)
+It will force add Nvidia container options (--gpus all --env NVIDIA_DRIVER_CAPABILITIES=all) in case you have installed Nvidia container toolkit.
+```
+git pull && cd docker && bash run.bash -fcn
+```
+
+#### Fix - Wrong UID - in Docker build stage
+Check $USER env var in your OS like `echo $USER`. If it is empty remove RobotCAD created docker image if exist. Then run `USER=replace_with_your_user_name bash run.bash` or `USER=replace_with_your_user_name bash run_basic.bash` dependent you try to run RobotCAD or generated project. 
+
+#### Fix - simulation is empty but RViz is ok
+Check you set Collisions of links, Material of robot and Calculate mass/inertia of robot.
+
+# Screenshots
+### Launched RViz and Gazebo using generated code:
+
+RViz
+![RViz](https://github.com/user-attachments/assets/4e3f28ca-e798-44a5-9f5f-422c4de770e5)
+
+Gazebo - Basic view
+![basic](https://github.com/user-attachments/assets/52aa2789-8cd1-442c-ad64-ae48f297cca7)
+
+Gazebo - Joints view
+![joints](https://github.com/user-attachments/assets/8808ea8d-4784-4344-aa85-eaf12ab5917a)
+
+Gazebo - Collisions view
+![collision](https://github.com/user-attachments/assets/b7cae031-40cc-41c3-8233-4d56ca29d2c1)
+
+Gazebo - Inertia view
+![inertia](https://github.com/user-attachments/assets/71983ee3-3995-47d2-a8dc-516c6c2b8a48)
+
+
+## One more robot
+
+Choosing of material of robot or link
+![Choosing of material of robot or link](https://github.com/user-attachments/assets/54593e92-dba6-4280-9510-b77cb2048910)
+
+Generated ROS 2 package
+
+![Generated ROS 2 package](https://github.com/drfenixion/freecad.robotcad/assets/13005708/f366c2d2-af67-46e2-b7ea-8d03821e5646)
+
+Launched Rviz and Gazebo from generated Gazebo launcher
+![Launched Rviz and Gazebo from gazebo launcher](https://github.com/drfenixion/freecad.cross/assets/13005708/9017aec4-70e5-45fa-82ad-6b4646453767)
+
+Generated inertia blocks and centers of mass in Gazebo
+![Generated inertia blocks and centers of mass in Gazebo](https://github.com/drfenixion/freecad.cross/assets/13005708/a46715a0-0dc6-4f6e-b80e-e4c644589477)
+
+Generated collisions in Gazebo
+![Generated collisions in Gazebo](https://github.com/drfenixion/freecad.cross/assets/13005708/c43a8d29-fe17-4268-b0dc-76f943c4b0b5)
+
+## Usage
+
+[Common usage plan](https://github.com/drfenixion/freecad.robotcad/wiki) 
+
+## Description
+
+RobotCAD is a powerful ROS workbench for [FreeCAD](https://www.freecad.org/), a popular open-source 3D parametric modelling software.
+As the field of robotics continues to evolve rapidly, the need for comprehensive and efficient tools for robot development and simulation has become increasingly essential.
+RobotCAD emerges as a versatile solution, empowering engineers, researchers, and hobbyists to leverage the capabilities of both ROS and FreeCAD in a cohesive environment.
+At the time of writing (June 2023), RobotCAD is the only available open-source solution to generate robot description files for ROS with a graphical user interface with direct visual feedback.
+
+With RobotCAD, users gain the ability to combine the flexibility of FreeCAD's 3D modeling capabilities with the extensive functionality of ROS, allowing for seamless collaboration between mechanical design and robotics development.
+    By bridging the gap between these two powerful platforms, RobotCAD streamlines the process of designing, and visualizing robotic systems, ultimately accelerating the development cycle.
+
+The key features of RobotCAD are:
+
+* ROS Integration: RobotCAD offers native integration with ROS, an open-source framework widely adopted in the robotics community.
+        This integration enables users to leverage the vast ecosystem of ROS packages, libraries, and tools while working within the familiar FreeCAD environment.
+* 3D Modelling and Simulation: FreeCAD's 3D modelling capabilities empower users to design intricate mechanical components and complete robot systems.
+        With RobotCAD, these designs can be seamlessly integrated with ROS simulations, allowing for realistic and accurate testing of robot behaviors and interactions.
+* Visualization and Analysis: RobotCAD provides advanced visualization and analysis tools provided by FreeCAD itself, enabling users to inspect, analyze, and validate their robot designs.
+* Collaborative Development: RobotCAD supports collaborative development by facilitating the sharing of robot models through the use of complex macro written in the Python language where a full robot can be generated by code.
+        This encourages teamwork, knowledge sharing, and accelerates the pace of innovation within the robotics community.
+* Extensibility: As an open-source project, RobotCAD encourages contributions from the community, allowing users to extend its functionality and adapt it to their specific needs.
+        By leveraging the collective expertise of the ROS and FreeCAD communities, RobotCAD continues to evolve and provide cutting-edge features for robot development.
+
+## Compatibility
+
+Compatible with FreeCAD at least v0.21.2 - min Python 3.12 inside FreeCAD (suited: FreeCAD Conda, FreeCAD-Daily. not suited: FreeCAD AppImage).
+Compatible with ROS2.
+
+## Features
+
+- Export `Part::Box`, `Part::Sphere`, and `Part::Cylinder` as text to be included in a URDF file,
+- Generate an enclosing box, sphere, cylinder (any axis-aligned), copy of original object as collision objects,
+- Build a robot from scratch and generate the URDF file for it,
+- Set a value for each actuated joint of a robot and have the links move accordingly,
+- Import URDF/xacro files,
+- Import xacro definitions, i.e. import xacro files that only define some macros and ask the user to choose a macro and its parameters to generate a full-feature URDF,
+- Export the xacro as xacro that includes (`xacro:include`) the original xacro file and uses the macro.
+- Combine several xacros files (i.e. also URDF) into a workcell and export them as a xacro file.
+- Get the current planning scene (relies on the /get_planning_scene service of type `moveit_msgs/srv/GetPlanningScene`)
+- Define a pose and possibly bring a specific link to it. All links that are fixed to this link will follow but the inverse kinematic solutions are not shown.
+
+## OLD Installation
+
+You need a recent version of FreeCAD (v1 or above) with the ability to configure custom repositories for the Addon Manager to install the workbench via the Addon Manager. On earlier version you're on your own, see instructions for local install below.
+
+Min Python version is 3.12 (inside FreeCAD). There is Conda FreeCAD with suited Python version. There is NO AppImage FreeCAD with suited version currently. At moment of writing there is FreeCAD-Daily with py3.12 but it is not recomended because not stable version. Best way is use Conda for install currently.
+
+Example of installation of Conda FreeCAD with correct Python version and RobotCAD by git clone:
+```
+mkdir -p /home/$USER/miniconda3 && \
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /home/$USER/miniconda3/miniconda.sh && \
+bash /home/$USER/miniconda3/miniconda.sh -b -u -p /home/$USER/miniconda3 && \
+rm /home/$USER/miniconda3/miniconda.sh && \
+. /home/$USER/miniconda3/bin/activate && \
+conda init --all && \
+conda config --add channels conda-forge && \
+conda create -n freecad_1_0_312 freecad=1.0.0=py312h0c3bf70_4 python=3.12 && \
+conda activate freecad_1_0_312 && \
+conda install numpy pandas matplotlib requests qt6-wayland pycollada
+conda install robostack-jazzy::ros-jazzy-xacro
+cd ~/.local/share/FreeCAD/Mod
+git clone https://github.com/drfenixion/freecad.robotcad.git
+cd -
+freecad
+```
+
+#### One more install distribution option here
+It is Conda solo archive with RobotCAD, FreeCAD and dependencies.
+If you have any issue with installation you can download this archive and unpack it. RobotCAD will already installed in FreeCAD with it`s dependencies.
+How to run RobotCAD from Conda archive.
+Download (~900Mb) robotcad_8_3_3_freecad_1_0_py312.tar.gz  (the archive is available for RobotCAD donors, if interested, write to it.project.devel@gmail.com)
+```
+mkdir robotcad
+tar -xzf robotcad_8_3_3_freecad_1_0_py312.tar.gz -C robotcad
+source robotcad/bin/activate
+conda-unpack
+freecad
+```
+Tested on Xubuntu 24.04.
+
+## Launching FreeCAD with ROS
+
+The RobotCAD workbench is supposed to load also without ROS, with limited functionality.
+If this is not the case, please report.
+
+You will probably want to be able to use ROS-related functionalities and this requires launching FreeCAD from the command line:
+
+- Install all RobotCAD dependencies by install RobotCAD dependency meta package
+- `sudo apt-get update`
+- `cd docker/ros2_ws/ && rosdep update && rosdep install -y -r -q --from-paths src --ignore-src --rosdistro ${ROS_DISTRO}`
+- `. /install/setup.bash`
+
+(Optional) You can also set extra Python modules
+- Open a terminal
+- Source your ROS workspace
+- Launch FreeCAD with extra Python modules set by ROS, `freecad --module-path ${PYTHONPATH//:/' --module-path '}` (replace `freecad` by your FreeCAD executable). This bash magic will add for example ` --module-path path1 --module-path path2 ` if `$PYTHONPATH` is `path1:path2`.
+
+## Testing/developing the workbench
+
+If you want to work on this workbench you have the following options (choose one):
+
+- Run RobotCAD by fast run script with `-d` flag. You need to remove RobotCAD docker container first if it was created before without `-d` flag. You can do remove old container and run with debug by `-fd` flags. After that you will able to use VSCODE debugger.
+```
+git clone https://github.com/drfenixion/freecad.robotcad.git
+cd freecad.robotcad/docker
+bash run.bash -d
+```
+- Install RobotCAD manually via Conda, see installation section. Run FreeCAD with DEBUG=1 env.
+```
+DEBUG=1 freecad
+```
+- Clone the repository directory in FreeCAD's `Mod` directory: `cd ~/.local/share/FreeCAD/Mod && git clone https://github.com/drfenixion/freecad.robotcad.git` on Linux
+- Start FreeCAD from the root-directory of this repository in a terminal (by default `freecad.robotcad`)
+- Clone this repository and create a symbolic link to the directory `freecad.robotcad` (or the directory containing this repository if you changed the name) to FreeCAD's `Mod` directory (`~/.local/share/FreeCAD/Mod` on Linux).
+- `pip install -e .` adds the root-directory to `easy_install.path`.
+
+New code will not automatically load to FreeCAD. You should restart FreeCAD by `bash run.bash -d` command for getting affect of corrected code.
+
+
+--------------------------------------------------------------------------------
+
+[ROS2]: https://www.ros.org/

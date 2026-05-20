@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DigitalTwinKinematicsDialog</class>
+ <widget class="QDialog" name="DigitalTwinKinematicsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Digital Twin Kinematics</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="header_label">
+     <property name="text">
+      <string>Kinematics Page</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="robot_selection_widget">
+     <layout class="QGridLayout" name="robotSelectionLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="robot_label">
+        <property name="text">
+         <string>Robot</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="robot_line_edit">
+        <property name="placeholderText">
+         <string>Select a robot or pick one</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pick_robot_button">
+        <property name="text">
+         <string>Pick Robot</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="endeffector_label">
+        <property name="text">
+         <string>End-effector link</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="endeffector_line_edit">
+        <property name="placeholderText">
+         <string>Link label of the end-effector</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pick_link_button">
+        <property name="text">
+         <string>Pick Link</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="status_label">
+     <property name="text">
+      <string></string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="forward_group_box">
+     <property name="title">
+      <string>Forward Kinematics</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="fk_matrix_label">
+        <property name="text">
+         <string>Transformation matrix</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QTextEdit" name="fk_matrix_text"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="end_effector_label">
+        <property name="text">
+         <string>End-effector coordinates (X, Y, Z)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QWidget" name="coordinate_widget">
+        <layout class="QHBoxLayout" name="coordLayout">
+         <item>
+          <widget class="QLineEdit" name="x_input">
+           <property name="placeholderText">
+            <string>X</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="y_input">
+           <property name="placeholderText">
+            <string>Y</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="z_input">
+           <property name="placeholderText">
+            <string>Z</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="compute_fk_button">
+        <property name="text">
+         <string>Compute Forward Kinematics</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="inverse_group_box">
+     <property name="title">
+      <string>Inverse Kinematics</string>
+     </property>
+     <layout class="QGridLayout" name="inverseGrid">
+      <item row="0" column="0">
+       <widget class="QLabel" name="joint_angles_label">
+        <property name="text">
+         <string>Joint angles</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QTextEdit" name="joint_angles_text"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="solutions_label">
+        <property name="text">
+         <string>Solutions</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QTextEdit" name="solutions_text"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="compute_ik_button">
+        <property name="text">
+         <string>Compute Inverse Kinematics</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
