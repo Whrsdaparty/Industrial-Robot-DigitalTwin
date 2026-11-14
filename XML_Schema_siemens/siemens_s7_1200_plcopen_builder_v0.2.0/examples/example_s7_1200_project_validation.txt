@@ -1,0 +1,2 @@
+XML is valid against tc6_xml_v201.xsd.
+Siemens hardware extension is valid against siemens_s7_1200_hardware_v1.xsd.

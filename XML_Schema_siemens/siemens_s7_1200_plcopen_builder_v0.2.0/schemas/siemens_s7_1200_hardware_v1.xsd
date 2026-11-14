@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="https://integracad-open.org/xml/hardware/siemens/s7-1200/v1"
+            xmlns:s7="https://integracad-open.org/xml/hardware/siemens/s7-1200/v1"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:element name="hardwareConfiguration">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="device" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="catalogSummary" type="xsd:string"/>
+              <xsd:element name="catalogSource" type="xsd:string" minOccurs="0"/>
+              <xsd:element name="catalogProperties">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="property" minOccurs="0" maxOccurs="unbounded">
+                      <xsd:complexType mixed="true">
+                        <xsd:attribute name="name" type="xsd:string" use="required"/>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="installation">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="network">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="ipAddress" type="xsd:string" minOccurs="0"/>
+                          <xsd:element name="subnetMask" type="xsd:string" minOccurs="0"/>
+                          <xsd:element name="gateway" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                  <xsd:attribute name="rack" type="xsd:string"/>
+                  <xsd:attribute name="slot" type="xsd:string"/>
+                  <xsd:attribute name="stationName" type="xsd:string"/>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="websiteData">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="productUrl" type="xsd:anyURI" minOccurs="0"/>
+                    <xsd:element name="supportUrl" type="xsd:anyURI" minOccurs="0"/>
+                    <xsd:element name="datasheetUrl" type="xsd:anyURI" minOccurs="0"/>
+                    <xsd:element name="manualUrl" type="xsd:anyURI" minOccurs="0"/>
+                    <xsd:element name="caxUrl" type="xsd:anyURI" minOccurs="0"/>
+                    <xsd:element name="operatingTemperature" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="approvals" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="notes" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="websiteProperties" minOccurs="0">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="property" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType mixed="true">
+                              <xsd:attribute name="name" type="xsd:string" use="required"/>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="dimensions" minOccurs="0">
+                      <xsd:complexType>
+                        <xsd:attribute name="widthMm" type="xsd:string"/>
+                        <xsd:attribute name="heightMm" type="xsd:string"/>
+                        <xsd:attribute name="depthMm" type="xsd:string"/>
+                        <xsd:attribute name="weightKg" type="xsd:string"/>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                  <xsd:attribute name="checkedDate" type="xsd:string"/>
+                  <xsd:attribute name="lifecycleStatus" type="xsd:string"/>
+                  <xsd:attribute name="firmwareVersion" type="xsd:string"/>
+                  <xsd:attribute name="hardwareVersion" type="xsd:string"/>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:ID" use="required"/>
+            <xsd:attribute name="deviceTag" type="xsd:string" use="required"/>
+            <xsd:attribute name="quantity" type="xsd:positiveInteger" use="required"/>
+            <xsd:attribute name="manufacturer" type="xsd:string" use="required"/>
+            <xsd:attribute name="family" type="xsd:string" use="required"/>
+            <xsd:attribute name="category" type="xsd:string" use="required"/>
+            <xsd:attribute name="productName" type="xsd:string" use="required"/>
+            <xsd:attribute name="articleNumber" type="xsd:string" use="required"/>
+            <xsd:attribute name="catalogYear" type="xsd:string"/>
+            <xsd:attribute name="catalogPage" type="xsd:string"/>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="manufacturer" type="xsd:string" use="required"/>
+      <xsd:attribute name="family" type="xsd:string" use="required"/>
+      <xsd:attribute name="generatedBy" type="xsd:string" use="required"/>
+      <xsd:attribute name="generatedAt" type="xsd:dateTime" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="graphicalSourceNote" type="xsd:string"/>
+</xsd:schema>

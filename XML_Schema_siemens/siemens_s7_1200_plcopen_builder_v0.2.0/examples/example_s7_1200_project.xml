@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:s7="https://integracad-open.org/xml/hardware/siemens/s7-1200/v1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <fileHeader companyName="Example Controls Engineering" productName="Siemens S7-1200 PLCopen Builder" productVersion="0.2.0" creationDateTime="2026-07-18T08:47:23Z" companyURL="https://example.invalid" contentDescription="Example Siemens S7-1200 PLCopen project and hardware handoff" />
+  <contentHeader name="Example_Conveyor_Cell" version="1.0.0" modificationDateTime="2026-07-18T08:47:23Z" organization="Controls Engineering" author="Elliott Grant" language="en-US">
+    <Comment>Example only. Verify all manufacturer data before production use.</Comment>
+    <coordinateInfo>
+      <pageSize x="210" y="297" />
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addDataInfo>
+      <info name="https://integracad-open.org/addData/siemens-s7-1200-hardware/v1" version="1.0" vendor="https://www.siemens.com/">
+        <description>
+          <xhtml:xhtml>Siemens S7-1200 hardware configuration and manufacturer product metadata.</xhtml:xhtml>
+        </description>
+      </info>
+    </addDataInfo>
+  </contentHeader>
+  <types>
+    <dataTypes>
+      <dataType name="E_MachineState">
+        <baseType>
+          <enum>
+            <values>
+              <value name="Idle" value="0" />
+              <value name="Starting" value="1" />
+              <value name="Running" value="2" />
+              <value name="Stopping" value="3" />
+              <value name="Faulted" value="4" />
+            </values>
+          </enum>
+        </baseType>
+        <documentation>
+          <xhtml:xhtml>Machine operating state.</xhtml:xhtml>
+        </documentation>
+      </dataType>
+      <dataType name="ST_MotorStatus">
+        <baseType>
+          <struct>
+            <variable name="Ready">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Running">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Faulted">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="Starts">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </struct>
+        </baseType>
+        <documentation>
+          <xhtml:xhtml>Normalized motor status.</xhtml:xhtml>
+        </documentation>
+      </dataType>
+      <dataType name="A_ZoneEnabled">
+        <baseType>
+          <array>
+            <dimension lower="1" upper="8" />
+            <baseType>
+              <BOOL />
+            </baseType>
+          </array>
+        </baseType>
+        <documentation>
+          <xhtml:xhtml>Zone enable flags.</xhtml:xhtml>
+        </documentation>
+      </dataType>
+    </dataTypes>
+    <pous>
+      <pou name="MainProgram" pouType="program">
+        <interface>
+          <localVars>
+            <variable name="MachineState">
+              <type>
+                <derived name="E_MachineState" />
+              </type>
+              <initialValue>
+                <simpleValue value="Idle" />
+              </initialValue>
+              <documentation>
+                <xhtml:xhtml>Current sequence state.</xhtml:xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+          <inputVars>
+            <variable name="StartPB">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml:xhtml>Start pushbutton input.</xhtml:xhtml>
+              </documentation>
+            </variable>
+            <variable name="StopPB">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml:xhtml>Stop pushbutton input.</xhtml:xhtml>
+              </documentation>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="MotorRunCmd">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml:xhtml>Conveyor motor run command.</xhtml:xhtml>
+              </documentation>
+            </variable>
+          </outputVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:xhtml>(* Simplified example only *)
+IF StopPB THEN
+    MotorRunCmd := FALSE;
+    MachineState := E_MachineState.Stopping;
+ELSIF StartPB THEN
+    MotorRunCmd := TRUE;
+    MachineState := E_MachineState.Running;
+END_IF;
+</xhtml:xhtml>
+          </ST>
+        </body>
+        <documentation>
+          <xhtml:xhtml>Primary cyclic conveyor program.</xhtml:xhtml>
+        </documentation>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations>
+      <configuration name="ConveyorCellConfig">
+        <resource name="PLC_1">
+          <task name="MainTask" priority="1" interval="T#50ms">
+            <pouInstance name="MainInstance" typeName="MainProgram" />
+            <documentation>
+              <xhtml:xhtml>Primary cyclic task.</xhtml:xhtml>
+            </documentation>
+          </task>
+        </resource>
+        <globalVars retain="true">
+          <variable name="CycleCount">
+            <type>
+              <UDINT />
+            </type>
+            <initialValue>
+              <simpleValue value="0" />
+            </initialValue>
+            <documentation>
+              <xhtml:xhtml>Retained production cycle count.</xhtml:xhtml>
+            </documentation>
+          </variable>
+        </globalVars>
+      </configuration>
+    </configurations>
+  </instances>
+  <addData>
+    <data name="https://integracad-open.org/addData/siemens-s7-1200-hardware/v1" handleUnknown="preserve">
+      <s7:hardwareConfiguration manufacturer="Siemens" family="SIMATIC S7-1200" generatedBy="Siemens S7-1200 PLCopen Builder 0.2.0" generatedAt="2026-07-18T08:51:26Z">
+        <s7:device id="PLC1_1" deviceTag="PLC1" quantity="1" manufacturer="Siemens" family="SIMATIC S7-1200" category="CPU" productName="CPU 1214C DC/DC/DC" articleNumber="6ES7214-1AG40-0XB0" catalogYear="2017" catalogPage="3">
+          <s7:catalogSummary>100 KB program memory; 14 DI 24 V DC; 10 DQ 24 V DC; 2 AI 0-10 V DC</s7:catalogSummary>
+          <s7:catalogSource>SIMATIC S7-1200 Basic Controller brochure, Siemens AG 2017</s7:catalogSource>
+          <s7:catalogProperties>
+            <s7:property name="fail_safe">false</s7:property>
+            <s7:property name="onboard_ai">2</s7:property>
+            <s7:property name="onboard_aq">0</s7:property>
+            <s7:property name="onboard_di">14</s7:property>
+            <s7:property name="onboard_dq">10</s7:property>
+            <s7:property name="profinet_ports">1</s7:property>
+            <s7:property name="program_memory_kb">100</s7:property>
+            <s7:property name="variant">DC/DC/DC</s7:property>
+          </s7:catalogProperties>
+          <s7:installation rack="0" slot="1" stationName="conveyor-plc">
+            <s7:network>
+              <s7:ipAddress>192.168.10.10</s7:ipAddress>
+              <s7:subnetMask>255.255.255.0</s7:subnetMask>
+            </s7:network>
+          </s7:installation>
+          <s7:websiteData checkedDate="2026-07-18" lifecycleStatus="Verify current status in SiePortal" firmwareVersion="" hardwareVersion="">
+            <s7:productUrl>https://sieportal.siemens.com/en-ww/products-services/detail/6ES7214-1AG40-0XB0?tree=CatalogTree</s7:productUrl>
+            <s7:datasheetUrl>https://support.industry.siemens.com/teddatasheet/?caller=SIOS&amp;format=pdf&amp;language=en&amp;mlfbs=6ES7214-1AG40-0XB0</s7:datasheetUrl>
+            <s7:notes>Example data; current technical details require manufacturer review.</s7:notes>
+          </s7:websiteData>
+        </s7:device>
+        <s7:device id="DI1_2" deviceTag="DI1" quantity="1" manufacturer="Siemens" family="SIMATIC S7-1200" category="Digital Signal Module" productName="SM 1221 DI 16" articleNumber="6ES7221-1BH32-0XB0" catalogYear="2017" catalogPage="5">
+          <s7:catalogSummary>16 digital inputs, 24 V DC</s7:catalogSummary>
+          <s7:catalogSource>SIMATIC S7-1200 Basic Controller brochure, Siemens AG 2017</s7:catalogSource>
+          <s7:catalogProperties>
+            <s7:property name="digital_inputs">16</s7:property>
+            <s7:property name="digital_outputs">0</s7:property>
+          </s7:catalogProperties>
+          <s7:installation rack="0" slot="2" stationName="">
+            <s7:network />
+          </s7:installation>
+          <s7:websiteData checkedDate="2026-07-18" lifecycleStatus="Verify current status in SiePortal" firmwareVersion="" hardwareVersion="">
+            <s7:productUrl>https://sieportal.siemens.com/en-ww/products-services/detail/6ES7221-1BH32-0XB0?tree=CatalogTree</s7:productUrl>
+            <s7:datasheetUrl>https://support.industry.siemens.com/teddatasheet/?caller=SIOS&amp;format=pdf&amp;language=en&amp;mlfbs=6ES7221-1BH32-0XB0</s7:datasheetUrl>
+            <s7:notes>Example data; current technical details require manufacturer review.</s7:notes>
+          </s7:websiteData>
+        </s7:device>
+        <s7:device id="AI1_3" deviceTag="AI1" quantity="1" manufacturer="Siemens" family="SIMATIC S7-1200" category="Analog Signal Module" productName="SM 1231 AI 4 13-bit" articleNumber="6ES7231-4HD32-0XB0" catalogYear="2017" catalogPage="5">
+          <s7:catalogSummary>4 analog inputs, 13-bit; voltage or 4-20 mA</s7:catalogSummary>
+          <s7:catalogSource>SIMATIC S7-1200 Basic Controller brochure, Siemens AG 2017</s7:catalogSource>
+          <s7:catalogProperties>
+            <s7:property name="analog_inputs">4</s7:property>
+            <s7:property name="analog_outputs">0</s7:property>
+          </s7:catalogProperties>
+          <s7:installation rack="0" slot="3" stationName="">
+            <s7:network />
+          </s7:installation>
+          <s7:websiteData checkedDate="2026-07-18" lifecycleStatus="Verify current status in SiePortal" firmwareVersion="" hardwareVersion="">
+            <s7:productUrl>https://sieportal.siemens.com/en-ww/products-services/detail/6ES7231-4HD32-0XB0?tree=CatalogTree</s7:productUrl>
+            <s7:datasheetUrl>https://support.industry.siemens.com/teddatasheet/?caller=SIOS&amp;format=pdf&amp;language=en&amp;mlfbs=6ES7231-4HD32-0XB0</s7:datasheetUrl>
+            <s7:notes>Example data; current technical details require manufacturer review.</s7:notes>
+          </s7:websiteData>
+        </s7:device>
+        <s7:device id="PS1_4" deviceTag="PS1" quantity="1" manufacturer="Siemens" family="SIMATIC S7-1200" category="Power Supply" productName="PM 1207" articleNumber="6EP1332-1SH71" catalogYear="2017" catalogPage="6">
+          <s7:catalogSummary>SIMATIC S7-1200 PM 1207 power supply.</s7:catalogSummary>
+          <s7:catalogSource>SIMATIC S7-1200 Basic Controller brochure, Siemens AG 2017</s7:catalogSource>
+          <s7:catalogProperties />
+          <s7:installation rack="PANEL" slot="1" stationName="">
+            <s7:network />
+          </s7:installation>
+          <s7:websiteData checkedDate="2026-07-18" lifecycleStatus="Verify current status in SiePortal" firmwareVersion="" hardwareVersion="">
+            <s7:productUrl>https://sieportal.siemens.com/en-ww/products-services/detail/6EP1332-1SH71?tree=CatalogTree</s7:productUrl>
+            <s7:datasheetUrl>https://support.industry.siemens.com/teddatasheet/?caller=SIOS&amp;format=pdf&amp;language=en&amp;mlfbs=6EP1332-1SH71</s7:datasheetUrl>
+            <s7:notes>Example data; current technical details require manufacturer review.</s7:notes>
+          </s7:websiteData>
+        </s7:device>
+      </s7:hardwareConfiguration>
+    </data>
+  </addData>
+  <documentation>
+    <xhtml:xhtml>Example project illustrating a CPU, digital input module, analog input module, application types, variables, and a cyclic program task.</xhtml:xhtml>
+  </documentation>
+</project>

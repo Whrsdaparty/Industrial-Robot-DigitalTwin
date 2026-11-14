@@ -1,0 +1,45 @@
+Siemens S7-1200 PLCopen XML Builder 0.2.0
+Release validation date: 2026-07-18
+
+Python 3.13.5
+
+Automated tests:
+test_all_pou_language_bodies_validate (test_export.ExportTests.test_all_pou_language_bodies_validate) ... ok
+test_catalog_has_brochure_products (test_export.ExportTests.test_catalog_has_brochure_products) ... ok
+test_catalog_search (test_export.ExportTests.test_catalog_search) ... ok
+test_csv_handoffs (test_export.ExportTests.test_csv_handoffs) ... ok
+test_every_catalog_product_can_be_exported_in_extension (test_export.ExportTests.test_every_catalog_product_can_be_exported_in_extension) ... ok
+test_hardware_summary_is_quantity_weighted (test_export.ExportTests.test_hardware_summary_is_quantity_weighted) ... ok
+test_project_json_round_trip (test_export.ExportTests.test_project_json_round_trip) ... ok
+test_quality_report_detects_duplicate_tags_and_missing_program (test_export.ExportTests.test_quality_report_detects_duplicate_tags_and_missing_program) ... ok
+test_schema_valid_export (test_export.ExportTests.test_schema_valid_export) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.077s
+
+OK
+
+Command-line example validation:
+XML is valid against tc6_xml_v201.xsd.
+Siemens hardware extension is valid against siemens_s7_1200_hardware_v1.xsd.
+
+Catalog summary:
+Siemens SIMATIC S7-1200
+Catalog: 2017 brochure snapshot (104 products)
+Analog Signal Module: 10
+CPU: 19
+Communication Module: 13
+Digital Signal Module: 12
+Engineering Software: 10
+Fail-safe Signal Module: 3
+HMI: 5
+Memory Card: 6
+Power Supply: 1
+Signal Board: 11
+Starter Kit: 5
+System Accessory: 3
+Technology Module: 6
+
+Schema SHA-256:
+591b92ba65018a77c32ab9e606abf27bd810cb1f7761d972a85689531c51e20f  schemas/tc6_xml_v201.xsd
+1a917d90e4ef7ec71e7fdb8a4c01bd9f007994ca2cee1ce8127f3f56c65e5151  schemas/siemens_s7_1200_hardware_v1.xsd
